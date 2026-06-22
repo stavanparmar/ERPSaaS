@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP SaaS — Help & User Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --sidebar-w: 280px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--gray-900);
+      color: #e2e8f0;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0ea5e9, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; color: #fff;
+    }
+
+    .sidebar-logo h1 { font-size: 16px; font-weight: 700; color: #fff; }
+    .sidebar-logo span { font-size: 11px; color: var(--gray-400); display: block; }
+
+    .sidebar-search {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .sidebar-search input {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: #e2e8f0;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .sidebar-search input::placeholder { color: var(--gray-400); }
+    .sidebar-search input:focus { border-color: var(--primary); }
+
+    .sidebar-nav { flex: 1; padding: 8px 12px 20px; }
+
+    .nav-section { margin-top: 16px; }
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      padding: 4px 8px;
+      margin-bottom: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: #1e293b;
+      color: #fff;
+    }
+
+    .nav-link.active { color: #818cf8; }
+
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    /* ── Main ── */
+    #main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 0;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 14px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-title { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+    .topbar-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c4a6e 100%);
+      padding: 64px 40px;
+      color: #fff;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero h1 { font-size: 38px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .hero h1 span { color: #818cf8; }
+    .hero p { font-size: 17px; color: rgba(255,255,255,0.7); max-width: 560px; margin-bottom: 32px; }
+
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      max-width: 700px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .hero-card .num { font-size: 28px; font-weight: 800; color: #818cf8; }
+    .hero-card .lbl { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    /* ── Content ── */
+    .content { padding: 40px; }
+    .content-inner { max-width: 900px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 56px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .section-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .section h2 { font-size: 22px; font-weight: 700; color: var(--gray-900); }
+    .section h2 small { display: block; font-size: 13px; font-weight: 400; color: var(--gray-400); margin-top: 1px; }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--gray-900); }
+    .card p { font-size: 14px; color: var(--gray-600); line-height: 1.7; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      width: 2px;
+      bottom: 0;
+      background: var(--gray-200);
+    }
+
+    .step-num {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-body { flex: 1; padding-bottom: 24px; }
+    .step-body h4 { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+    .step-body p { font-size: 13.5px; color: var(--gray-600); line-height: 1.7; }
+
+    /* ── Role Table ── */
+    .role-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .role-table th {
+      background: var(--gray-100);
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .role-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: top;
+    }
+
+    .role-table tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-blue  { background: #dbeafe; color: #1e40af; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-red   { background: #fee2e2; color: #991b1b; }
+    .badge-purple{ background: #ede9fe; color: #5b21b6; }
+
+    /* ── Module Grid ── */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .module-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 20px;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+
+    .module-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
+    .module-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .module-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    .module-card h3 { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+    .module-card p  { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 12px; }
+
+    .feature-list { list-style: none; }
+    .feature-list li {
+      font-size: 12.5px;
+      color: var(--gray-600);
+      padding: 3px 0;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* ── Flow Diagram ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 20px 0;
+    }
+
+    .flow-node {
+      background: var(--primary-light);
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .flow-node.green { background: #d1fae5; border-color: var(--success); color: #065f46; }
+    .flow-node.amber { background: #fef3c7; border-color: var(--warning); color: #92400e; }
+    .flow-node.red   { background: #fee2e2; border-color: var(--danger);  color: #991b1b; }
+
+    .flow-arrow {
+      font-size: 18px;
+      color: var(--gray-400);
+      padding: 0 6px;
+    }
+
+    /* ── FAQ ── */
+    .faq-item {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .faq-q {
+      padding: 16px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-900);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .faq-q:hover { background: var(--gray-50); }
+    .faq-q .arrow { transition: transform 0.2s; font-size: 12px; color: var(--gray-400); }
+    .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+
+    .faq-a {
+      display: none;
+      padding: 0 20px 16px;
+      font-size: 13.5px;
+      color: var(--gray-600);
+      line-height: 1.75;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Keyboard Shortcuts ── */
+    .shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .shortcut {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shortcut-desc { font-size: 13px; color: var(--gray-600); }
+
+    .kbd-group { display: flex; gap: 4px; }
+
+    kbd {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-bottom: 2px solid var(--gray-300);
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--gray-700);
+      font-weight: 600;
+    }
+
+    /* ── Alert ── */
+    .alert {
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13.5px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-icon { font-size: 18px; flex-shrink: 0; }
+    .alert-blue  { background: #eff6ff; border-left: 4px solid var(--secondary); color: #1e40af; }
+    .alert-green { background: #ecfdf5; border-left: 4px solid var(--success);   color: #065f46; }
+    .alert-amber { background: #fffbeb; border-left: 4px solid var(--warning);   color: #92400e; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--gray-200); margin: 40px 0; }
+
+    /* ── Scroll Top ── */
+    #scrollTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 42px; height: 42px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+      transition: opacity 0.2s;
+      opacity: 0;
+      z-index: 200;
+    }
+
+    #scrollTop.visible { opacity: 1; }
+    #scrollTop:hover { background: #4338ca; }
+
+    /* ── Print ── */
+    @media print {
+      #sidebar, .topbar, #scrollTop { display: none; }
+      #main { margin-left: 0; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      #sidebar { display: none; }
+      #main { margin-left: 0; }
+      .hero { padding: 40px 20px; }
+      .content { padding: 24px 20px; }
+      .topbar { padding: 12px 20px; }
+      .shortcuts { grid-template-columns: 1fr; }
+      .module-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">E</div>
+    <div>
+      <h1>ERP SaaS</h1>
+      <span>Help &amp; User Guide</span>
+    </div>
+  </div>
+
+  <div class="sidebar-search">
+    <input type="text" id="searchInput" placeholder="🔍  Search topics..." oninput="filterNav(this.value)" />
+  </div>
+
+  <div class="sidebar-nav" id="navLinks">
+    <div class="nav-section">
+      <div class="nav-section-label">Getting Started</div>
+      <a class="nav-link active" href="#overview"><span class="nav-icon">🏠</span> Overview</a>
+      <a class="nav-link" href="#quickstart"><span class="nav-icon">🚀</span> Quick Start</a>
+      <a class="nav-link" href="#roles"><span class="nav-icon">👤</span> Roles &amp; Permissions</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Modules</div>
+      <a class="nav-link" href="#users"><span class="nav-icon">👥</span> User Management</a>
+      <a class="nav-link" href="#departments"><span class="nav-icon">🏢</span> Departments</a>
+      <a class="nav-link" href="#employees"><span class="nav-icon">👨‍💼</span> Employees</a>
+      <a class="nav-link" href="#attendance"><span class="nav-icon">📅</span> Attendance</a>
+      <a class="nav-link" href="#leaves"><span class="nav-icon">📋</span> Leaves</a>
+      <a class="nav-link" href="#payroll"><span class="nav-icon">💰</span> Payroll</a>
+      <a class="nav-link" href="#inventory"><span class="nav-icon">📦</span> Inventory</a>
+      <a class="nav-link" href="#sales"><span class="nav-icon">🛒</span> Sales</a>
+      <a class="nav-link" href="#purchases"><span class="nav-icon">🚚</span> Purchases</a>
+      <a class="nav-link" href="#accounting"><span class="nav-icon">🧮</span> Accounting</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Reference</div>
+      <a class="nav-link" href="#flows"><span class="nav-icon">🔄</span> Process Flows</a>
+      <a class="nav-link" href="#faq"><span class="nav-icon">❓</span> FAQ</a>
+      <a class="nav-link" href="#shortcuts"><span class="nav-icon">⌨️</span> Shortcuts</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════════ -->
+<main id="main">
+
+  <div class="topbar">
+    <span class="topbar-title">📖 ERP SaaS — Complete Help Guide</span>
+    <span class="topbar-badge">v1.0 · 2026</span>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero" id="overview">
+    <div class="hero-badge">📖 HELP CENTER</div>
+    <h1>Welcome to <span>ERP SaaS</span><br>Help &amp; Documentation</h1>
+    <p>Everything you need to understand, operate, and get the most out of every module in your ERP workspace.</p>
+    <div class="hero-cards">
+      <div class="hero-card"><div class="num">10</div><div class="lbl">Modules</div></div>
+      <div class="hero-card"><div class="num">3</div><div class="lbl">User Roles</div></div>
+      <div class="hero-card"><div class="num">50+</div><div class="lbl">Features</div></div>
+      <div class="hero-card"><div class="num">24/7</div><div class="lbl">Multi-tenant</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+  <div class="content-inner">
+
+  <!-- ══ QUICK START ══ -->
+  <div class="section" id="quickstart">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e0e7ff">🚀</div>
+      <div>
+        <h2>Quick Start<small>Get up and running in minutes</small></h2>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <div class="alert-icon">💡</div>
+      <div>First time? Start here. This walkthrough covers registration → login → setting up your company workspace.</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:#e0e7ff;color:#4f46e5">1</div>
+        <div class="step-body">
+          <h4>Register Your Company</h4>
+          <p>Visit the <strong>/register</strong> page. Enter your company name, your email address, and a strong password (must contain uppercase, lowercase, number, and a special character). This creates your company workspace and a <strong>Company Admin</strong> account for you.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#d1fae5;color:#065f46">2</div>
+        <div class="step-body">
+          <h4>Login to Your Workspace</h4>
+          <p>Use the email and password you just registered with on the <strong>/login</strong> page. You will land on the <strong>Dashboard</strong> with access to all modules.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#fef3c7;color:#92400e">3</div>
+        <div class="step-body">
+          <h4>Create Departments</h4>
+          <p>Go to <strong>Departments</strong> in the sidebar and create the departments in your organisation (e.g., HR, Engineering, Finance). Departments are required before adding employees.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#ede9fe;color:#5b21b6">4</div>
+        <div class="step-body">
+          <h4>Add Users &amp; Employees</h4>
+          <p>Go to <strong>User Management</strong> to create user accounts. Then go to <strong>Employees</strong> to link those users to departments and assign designations and salaries.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#fee2e2;color:#991b1b">5</div>
+        <div class="step-body">
+          <h4>Start Operations</h4>
+          <p>Now you can mark attendance, manage leave requests, run payroll, manage inventory, and process sales — all from the sidebar navigation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROLES ══ -->
+  <div class="section" id="roles">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e0e7ff">👤</div>
+      <div><h2>Roles &amp; Permissions<small>Who can do what</small></h2></div>
+    </div>
+
+    <div class="card">
+      <table class="role-table">
+        <thead>
+          <tr>
+            <th>Feature / Module</th>
+            <th>Super Admin</th>
+            <th>Company Admin</th>
+            <th>Employee</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>View User List</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>Create / Delete Users</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>Manage Departments</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>Manage Employees</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>Mark Attendance</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Own</span></td></tr>
+          <tr><td>Submit Leave Request</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Own</span></td></tr>
+          <tr><td>Approve / Reject Leaves</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>View Payroll</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Own</span></td></tr>
+          <tr><td>Create Payroll Records</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-red">✗ No Access</span></td></tr>
+          <tr><td>Inventory Management</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Only</span></td></tr>
+          <tr><td>Sales &amp; Invoicing</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Only</span></td></tr>
+          <tr><td>Purchases</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Only</span></td></tr>
+          <tr><td>Accounting &amp; Ledger</td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-green">✓ Full</span></td><td><span class="badge badge-blue">View Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- ══ MODULES ══ -->
+  <div class="section" id="users">
+    <div class="section-header">
+      <div class="section-icon" style="background:#dbeafe">👥</div>
+      <div><h2>User Management<small>Admin-only · Manage workspace accounts</small></h2></div>
+    </div>
+
+    <div class="alert alert-amber">
+      <div class="alert-icon">⚠️</div>
+      <div>Only <strong>Company Admin</strong> and <strong>Super Admin</strong> roles can access this module. Employees will not see it in the sidebar.</div>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#dbeafe">👤</div>
+          <h3>Creating a User</h3>
+        </div>
+        <p>Click <strong>Add User</strong> at the top right. Fill in First Name, Last Name, Email, Password, and Role. Password must include uppercase, lowercase, number, and special character.</p>
+        <ul class="feature-list">
+          <li>Select role: Employee or Company Admin</li>
+          <li>User receives access immediately on creation</li>
+          <li>Email must be unique across the platform</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#d1fae5">🗑️</div>
+          <h3>Deleting a User</h3>
+        </div>
+        <p>Click the <strong>Delete</strong> button in the user row. A confirmation prompt will appear. Deleted users are soft-deleted and cannot log in but their data is preserved.</p>
+        <ul class="feature-list">
+          <li>Action is irreversible via the UI</li>
+          <li>User data (payroll, attendance) is retained</li>
+          <li>Cannot delete your own account</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="departments">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fce7f3">🏢</div>
+      <div><h2>Departments<small>Organise your company structure</small></h2></div>
+    </div>
+    <div class="card">
+      <h3>What are Departments?</h3>
+      <p>Departments represent teams or divisions in your company. Every employee must belong to a department. Departments are created before employees.</p>
+    </div>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#fce7f3">➕</div>
+          <h3>Add Department</h3>
+        </div>
+        <p>Click <strong>Add Department</strong>, enter a name and optional description. A unique code is automatically generated.</p>
+        <ul class="feature-list">
+          <li>Name must be at least 2 characters</li>
+          <li>Description is optional</li>
+          <li>Department code is auto-generated</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#fef3c7">📊</div>
+          <h3>Department Cards</h3>
+        </div>
+        <p>Each department card shows the name, description, and total employee count. You can edit or delete from the card actions.</p>
+        <ul class="feature-list">
+          <li>Employee count auto-updates</li>
+          <li>Cannot delete if employees are assigned</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="employees">
+    <div class="section-header">
+      <div class="section-icon" style="background:#d1fae5">👨‍💼</div>
+      <div><h2>Employees<small>Link users to their operational profiles</small></h2></div>
+    </div>
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div>An employee profile is separate from a user account. A user must exist before you can create an employee record for them.</div>
+    </div>
+    <div class="card">
+      <h3>Employee Record Fields</h3>
+      <p>Each employee record stores: <strong>Employee ID</strong> (unique code), <strong>Department</strong>, <strong>Designation</strong> (job title), <strong>Salary</strong>, <strong>Joining Date</strong>, and <strong>Status</strong> (Active / Inactive / On Leave).</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:#d1fae5;color:#065f46">1</div>
+        <div class="step-body">
+          <h4>Filter by Department</h4>
+          <p>Use the department dropdown at the top to filter the employee list to a specific department.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#d1fae5;color:#065f46">2</div>
+        <div class="step-body">
+          <h4>Status Management</h4>
+          <p>Status can be <span class="badge badge-green">Active</span>, <span class="badge badge-amber">On Leave</span>, or <span class="badge badge-red">Inactive</span>. Update status via the edit action.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="attendance">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fef3c7">📅</div>
+      <div><h2>Attendance<small>Track daily check-in &amp; check-out</small></h2></div>
+    </div>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#fef3c7">📝</div>
+          <h3>Mark Attendance</h3>
+        </div>
+        <p>Admins click <strong>Mark Attendance</strong>. Select an employee, date, status, and optionally the check-in and check-out times.</p>
+        <ul class="feature-list">
+          <li>Statuses: Present, Absent, Half Day, Leave</li>
+          <li>Check-in/out times are optional</li>
+          <li>Can add notes for context</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#d1fae5">📊</div>
+          <h3>View Records</h3>
+        </div>
+        <p>All attendance records are displayed in a table with employee name, date, status badge, and times. Delete individual records if needed.</p>
+        <ul class="feature-list">
+          <li>Employees see their own records only</li>
+          <li>Admins see all company records</li>
+          <li>Color-coded status badges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="leaves">
+    <div class="section-header">
+      <div class="section-icon" style="background:#ede9fe">📋</div>
+      <div><h2>Leave Management<small>Request, approve, and track leaves</small></h2></div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-node">Employee Submits</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node amber">Pending Review</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Admin Approves</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node red">or Rejects</div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3>Leave Types</h3>
+      <p>
+        <span class="badge badge-blue">Casual</span>&nbsp;
+        <span class="badge badge-green">Sick</span>&nbsp;
+        <span class="badge badge-purple">Earned</span>&nbsp;
+        <span class="badge badge-amber">Maternity</span>&nbsp;
+        <span class="badge badge-amber">Paternity</span>&nbsp;
+        <span class="badge badge-red">Unpaid</span>&nbsp;
+        <span class="badge" style="background:#f3f4f6;color:#374151">Other</span>
+      </p>
+    </div>
+
+    <div class="module-grid" style="margin-top:16px">
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#ede9fe">📤</div>
+          <h3>Submit a Request</h3>
+        </div>
+        <p>Select leave type, start date, end date, and provide a reason (minimum 5 characters). Submit the form to create a Pending request.</p>
+        <ul class="feature-list">
+          <li>Employees submit for themselves</li>
+          <li>Admins can submit on behalf of any employee</li>
+          <li>Duration is calculated automatically</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#d1fae5">✅</div>
+          <h3>Approve or Reject</h3>
+        </div>
+        <p>Admins see all leave requests and can Approve or Reject each one. Employees can Cancel their own pending requests.</p>
+        <ul class="feature-list">
+          <li>Dashboard shows summary counts by status</li>
+          <li>Filter by status (Pending / Approved / Rejected)</li>
+          <li>Cancelled leaves cannot be reactivated</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="payroll">
+    <div class="section-header">
+      <div class="section-icon" style="background:#d1fae5">💰</div>
+      <div><h2>Payroll<small>Process monthly salaries and records</small></h2></div>
+    </div>
+    <div class="card">
+      <h3>How Payroll Works</h3>
+      <p>Payroll records are created monthly per employee. The system stores Base Salary, Bonuses, Deductions, Taxes, and auto-calculates <strong>Net Salary = Base + Bonuses − Deductions − Taxes</strong>.</p>
+    </div>
+    <div class="module-grid" style="margin-top:16px">
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#d1fae5">➕</div>
+          <h3>Create Payroll Record</h3>
+        </div>
+        <p>Select an employee and month, fill in salary components. The record starts as <span class="badge badge-amber">Draft</span>.</p>
+        <ul class="feature-list">
+          <li>Month format: YYYY-MM (e.g., 2024-06)</li>
+          <li>Base salary pulled from employee profile</li>
+          <li>All amounts in default currency</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header">
+          <div class="module-card-icon" style="background:#fef3c7">📊</div>
+          <h3>Payroll Status Flow</h3>
+        </div>
+        <p>Status progression: <span class="badge badge-amber">Draft</span> → <span class="badge badge-blue">Approved</span> → <span class="badge badge-green">Paid</span>. Admins update status via the table action.</p>
+        <ul class="feature-list">
+          <li>Employees view their own payslips</li>
+          <li>Filter by status or month</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="inventory">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fce7f3">📦</div>
+      <div><h2>Inventory<small>Products, stock, and purchase orders</small></h2></div>
+    </div>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#fce7f3">📂</div><h3>Categories</h3></div>
+        <p>Create product categories (e.g., Electronics, Raw Materials) with a name and code. Categories help organise products.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#dbeafe">🏭</div><h3>Suppliers</h3></div>
+        <p>Register suppliers with name, email, and phone. Suppliers are linked to purchase orders.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#d1fae5">📦</div><h3>Products</h3></div>
+        <p>Each product has SKU, name, category, unit, cost price, selling price, quantity, and a reorder level. Products with stock ≤ reorder level are flagged as <strong>Low Stock</strong>.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#fef3c7">🔄</div><h3>Stock Adjustment</h3></div>
+        <p>Manually adjust stock levels with type (In / Out), quantity, and notes. All adjustments are logged as inventory transactions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sales">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fef3c7">🛒</div>
+      <div><h2>Sales &amp; Invoicing<small>Customers, orders, and payments</small></h2></div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-node">Customer</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Sales Order</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node amber">Invoice</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Payment</div>
+    </div>
+
+    <div class="module-grid" style="margin-top:20px">
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#fef3c7">👤</div><h3>Customers</h3></div>
+        <p>Add customers with name and email. Customers are linked to sales orders and invoices.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#dbeafe">📄</div><h3>Sales Orders</h3></div>
+        <p>Create a sales order by selecting a customer and one or more products with quantities. A unique SO number is generated.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#d1fae5">🧾</div><h3>Invoices</h3></div>
+        <p>Generate an invoice from a sales order or standalone. Set a due date. Invoice status: <span class="badge badge-amber">Pending</span> → <span class="badge badge-green">Paid</span>.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#ede9fe">💳</div><h3>Record Payment</h3></div>
+        <p>Record full or partial payments against an invoice. Supported methods: Cash, Cheque, Bank Transfer, Credit Card.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="purchases">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e0e7ff">🚚</div>
+      <div><h2>Purchases<small>Purchase orders and goods receipt</small></h2></div>
+    </div>
+    <div class="card">
+      <h3>Purchase Order Workflow</h3>
+      <p>Create a purchase order by selecting a supplier, product, quantity, and unit price. Once goods arrive, use <strong>Receive Items</strong> to enter the received quantities and automatically update stock levels.</p>
+    </div>
+    <div class="flow" style="margin-top:16px">
+      <div class="flow-node">Create PO</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node amber">Pending</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Receive Items</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Stock Updated</div>
+    </div>
+  </div>
+
+  <div class="section" id="accounting">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fce7f3">🧮</div>
+      <div><h2>Accounting<small>Journal entries, ledger, and reports</small></h2></div>
+    </div>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#fce7f3">📝</div><h3>Journal Entries</h3></div>
+        <p>Create double-entry journal entries with debit and credit line items. Each entry can be a Draft, Posted, or Voided.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#d1fae5">📊</div><h3>General Ledger</h3></div>
+        <p>View a summary of all account balances grouped by account type (Asset, Liability, Equity, Revenue, Expense).</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#dbeafe">⚖️</div><h3>Trial Balance</h3></div>
+        <p>Auto-generated report showing total debits and credits per account. Helps verify books are balanced.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-card-header"><div class="module-card-icon" style="background:#fef3c7">📈</div><h3>Financial Reports</h3></div>
+        <p>Summary financial report showing revenue, expenses, and net profit/loss for the selected period.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- ══ PROCESS FLOWS ══ -->
+  <div class="section" id="flows">
+    <div class="section-header">
+      <div class="section-icon" style="background:#d1fae5">🔄</div>
+      <div><h2>Key Process Flows<small>End-to-end module interactions</small></h2></div>
+    </div>
+
+    <div class="card">
+      <h3>HR Onboarding Flow</h3>
+      <div class="flow" style="flex-wrap:wrap;gap:6px;margin-top:12px">
+        <div class="flow-node">Register Company</div><div class="flow-arrow">→</div>
+        <div class="flow-node">Create Department</div><div class="flow-arrow">→</div>
+        <div class="flow-node">Create User Account</div><div class="flow-arrow">→</div>
+        <div class="flow-node">Create Employee Profile</div><div class="flow-arrow">→</div>
+        <div class="flow-node green">Mark Attendance</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Sales-to-Cash Flow</h3>
+      <div class="flow" style="flex-wrap:wrap;gap:6px;margin-top:12px">
+        <div class="flow-node">Add Customer</div><div class="flow-arrow">→</div>
+        <div class="flow-node">Create Sales Order</div><div class="flow-arrow">→</div>
+        <div class="flow-node amber">Generate Invoice</div><div class="flow-arrow">→</div>
+        <div class="flow-node green">Record Payment</div><div class="flow-arrow">→</div>
+        <div class="flow-node green">Post to Accounting</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Procure-to-Pay Flow</h3>
+      <div class="flow" style="flex-wrap:wrap;gap:6px;margin-top:12px">
+        <div class="flow-node">Register Supplier</div><div class="flow-arrow">→</div>
+        <div class="flow-node">Create Purchase Order</div><div class="flow-arrow">→</div>
+        <div class="flow-node amber">Receive Goods</div><div class="flow-arrow">→</div>
+        <div class="flow-node green">Stock Updated</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Leave Management Flow</h3>
+      <div class="flow" style="flex-wrap:wrap;gap:6px;margin-top:12px">
+        <div class="flow-node">Employee Submits Leave</div><div class="flow-arrow">→</div>
+        <div class="flow-node amber">Status: Pending</div><div class="flow-arrow">→</div>
+        <div class="flow-node green">Admin Approves</div><div class="flow-arrow"> / </div>
+        <div class="flow-node red">Admin Rejects</div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- ══ FAQ ══ -->
+  <div class="section" id="faq">
+    <div class="section-header">
+      <div class="section-icon" style="background:#fef3c7">❓</div>
+      <div><h2>Frequently Asked Questions</h2></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        I forgot my password — how do I reset it?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Currently, password reset is handled by your Company Admin. Ask them to delete your account and recreate it, or contact system support. A self-service reset flow can be enabled by your administrator.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Why can't I see the Users or Departments menu items?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Those menu items are only visible to <strong>Company Admin</strong> and <strong>Super Admin</strong> roles. If you are an <strong>Employee</strong>, those sections are hidden for security. Contact your admin to change your role if needed.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        I get "Employee profile not found" on Leaves or Payroll — what does this mean?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Your user account does not have a linked employee profile yet. Ask your Company Admin to go to the <strong>Employees</strong> module and create an employee record for your account. Once linked, you will be able to see your own leaves and payslips.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What password requirements must I meet?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Your password must be at least 8 characters and include: one uppercase letter (A–Z), one lowercase letter (a–z), one number (0–9), and one special character from this set: !@#$%^&amp;*</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I have multiple companies in one account?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Each registration creates one company workspace. For multiple companies, register separate accounts. A Super Admin can manage multiple companies but each company operates as an isolated tenant.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Why am I getting "Request failed with status 429"?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">You have hit the API rate limit. In production, the limit is 300 requests per 15 minutes per IP. Wait a few minutes and try again. In development mode the limit is much higher (5,000 requests). If you see this frequently in production, contact your system administrator.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        How does the sidebar collapse work?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Click the chevron button (‹) in the top-right of the sidebar header to collapse it to an icon-only view. Click the (›) button to expand it again. On mobile, use the hamburger menu (☰) in the top bar to open and close the sidebar.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I edit an approved leave request?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-a">Once a leave is <strong>Approved</strong>, only the status can be changed by an admin. The dates and leave type cannot be edited. To change the request, cancel it and submit a new one.</div>
+    </div>
+  </div>
+
+  <!-- ══ SHORTCUTS ══ -->
+  <div class="section" id="shortcuts">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e0e7ff">⌨️</div>
+      <div><h2>Keyboard Shortcuts &amp; Tips</h2></div>
+    </div>
+
+    <div class="shortcuts">
+      <div class="shortcut">
+        <span class="shortcut-desc">Go to Dashboard</span>
+        <div class="kbd-group"><kbd>Alt</kbd><kbd>D</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Navigate sidebar (browser)</span>
+        <div class="kbd-group"><kbd>Tab</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Open new tab</span>
+        <div class="kbd-group"><kbd>Ctrl</kbd><kbd>T</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Reload page data</span>
+        <div class="kbd-group"><kbd>F5</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Submit a form</span>
+        <div class="kbd-group"><kbd>Enter</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Close modal / cancel</span>
+        <div class="kbd-group"><kbd>Esc</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Print / Save as PDF</span>
+        <div class="kbd-group"><kbd>Ctrl</kbd><kbd>P</kbd></div>
+      </div>
+      <div class="shortcut">
+        <span class="shortcut-desc">Search in page</span>
+        <div class="kbd-group"><kbd>Ctrl</kbd><kbd>F</kbd></div>
+      </div>
+    </div>
+
+    <div class="alert alert-blue" style="margin-top:24px">
+      <div class="alert-icon">💡</div>
+      <div><strong>Pro Tip:</strong> Use the <strong>Refresh</strong> button available on Inventory, Purchases, and other module pages to reload live data without refreshing the entire page.</div>
+    </div>
+  </div>
+
+  </div><!-- .content-inner -->
+  </div><!-- .content -->
+
+</main>
+
+<!-- Scroll to top -->
+<button id="scrollTop" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // ── Active nav link on scroll ──
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+    });
+
+    // Scroll-to-top button
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ── FAQ toggle ──
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+
+  // ── Nav search filter ──
+  function filterNav(q) {
+    q = q.toLowerCase().trim();
+    document.querySelectorAll('.nav-link').forEach(link => {
+      const text = link.textContent.toLowerCase();
+      link.style.display = (!q || text.includes(q)) ? '' : 'none';
+    });
+    document.querySelectorAll('.nav-section-label').forEach(label => {
+      label.style.display = (!q) ? '' : 'none';
+    });
+  }
+
+  // ── Smooth nav clicks ──
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

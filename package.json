@@ -1,0 +1,21 @@
+{
+  "name": "erp-saas-monorepo",
+  "version": "1.0.0",
+  "description": "Production-ready multi-tenant ERP SaaS for SMBs",
+  "private": true,
+  "workspaces": [
+    "apps/backend",
+    "apps/frontend",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=apps/backend\" \"npm run dev --workspace=apps/frontend\"",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "db:migrate": "npm run migrate --workspace=apps/backend",
+    "db:seed": "npm run seed --workspace=apps/backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
