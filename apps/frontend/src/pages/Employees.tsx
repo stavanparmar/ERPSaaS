@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { apiClient } from "../services/api";
 
@@ -27,9 +28,34 @@ interface Department {
   name: string;
 }
 
+interface CompanyUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+}
+
+function getApiErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    const responseData = err.response?.data as
+      | { message?: string; error?: string }
+      | undefined;
+    return responseData?.message || responseData?.error || err.message || fallback;
+  }
+
+  if (err instanceof Error) {
+    return err.message;
+  }
+
+  return fallback;
+}
+
 const Employees = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [assignableUsers, setAssignableUsers] = useState<CompanyUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -37,10 +63,14 @@ const Employees = () => {
   const [createLoading, setCreateLoading] = useState(false);
   const [filterDept, setFilterDept] = useState("");
   const [formData, setFormData] = useState({
+    userId: "",
     employeeId: "",
     designation: "",
     departmentId: "",
     salary: "",
+    phoneNumber: "",
+    address: "",
+    manager: "",
     joiningDate: new Date().toISOString().split("T")[0],
   });
 
@@ -65,10 +95,25 @@ const Employees = () => {
 
       // Load employees
       const empUrl = filterDept ? `/employees?departmentId=${filterDept}` : "/employees";
-      const response = await apiClient.get(empUrl);
-      setEmployees(response.data.data);
+      const empResponse = await apiClient.get(empUrl);
+      const loadedEmployees: Employee[] = empResponse.data.data || [];
+      setEmployees(loadedEmployees);
+
+      // Load users and keep only employee-role users not yet linked as employees.
+      const usersResponse = await apiClient.get("/users");
+      const companyUsers: CompanyUser[] = usersResponse.data.data || [];
+      const assignedUserIds = new Set(loadedEmployees.map((employee) => employee.user.id));
+
+      setAssignableUsers(
+        companyUsers.filter(
+          (companyUser) =>
+            companyUser.isActive &&
+            companyUser.role === "employee" &&
+            !assignedUserIds.has(companyUser.id)
+        )
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load data");
+      setError(getApiErrorMessage(err, "Failed to load data"));
     } finally {
       setIsLoading(false);
     }
@@ -90,11 +135,44 @@ const Employees = () => {
     setCreateLoading(true);
 
     try {
-      // This would require a user selection or creation flow
-      // For now, we'll show a placeholder message
-      setCreateError("Employee creation requires user management integration");
+      const payload: Record<string, string | number> = {
+        userId: formData.userId,
+        employeeId: formData.employeeId,
+        designation: formData.designation,
+        departmentId: formData.departmentId,
+        joiningDate: new Date(formData.joiningDate).toISOString(),
+      };
+
+      if (formData.salary) {
+        payload.salary = Number(formData.salary);
+      }
+      if (formData.phoneNumber) {
+        payload.phoneNumber = formData.phoneNumber;
+      }
+      if (formData.address) {
+        payload.address = formData.address;
+      }
+      if (formData.manager) {
+        payload.manager = formData.manager;
+      }
+
+      await apiClient.post("/employees", payload);
+
+      setFormData({
+        userId: "",
+        employeeId: "",
+        designation: "",
+        departmentId: "",
+        salary: "",
+        phoneNumber: "",
+        address: "",
+        manager: "",
+        joiningDate: new Date().toISOString().split("T")[0],
+      });
+      setShowCreateForm(false);
+      await loadData();
     } catch (err) {
-      setCreateError(err instanceof Error ? err.message : "Failed to create employee");
+      setCreateError(getApiErrorMessage(err, "Failed to create employee"));
     } finally {
       setCreateLoading(false);
     }
@@ -109,7 +187,7 @@ const Employees = () => {
       await apiClient.delete(`/employees/${employeeId}`);
       await loadData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete employee");
+      setError(getApiErrorMessage(err, "Failed to delete employee"));
     }
   };
 
@@ -187,6 +265,30 @@ const Employees = () => {
           )}
 
           <form onSubmit={handleCreateSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">User</label>
+              <select
+                name="userId"
+                required
+                value={formData.userId}
+                onChange={handleCreateChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                disabled={createLoading}
+              >
+                <option value="">Select User</option>
+                {assignableUsers.map((assignableUser) => (
+                  <option key={assignableUser.id} value={assignableUser.id}>
+                    {assignableUser.firstName} {assignableUser.lastName} ({assignableUser.email})
+                  </option>
+                ))}
+              </select>
+              {assignableUsers.length === 0 && (
+                <p className="mt-1 text-xs text-amber-700">
+                  No available employee users. Create users from User Management first.
+                </p>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -269,10 +371,53 @@ const Employees = () => {
               />
             </div>
 
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone Number (optional)
+                </label>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleCreateChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  disabled={createLoading}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Manager (optional)
+                </label>
+                <input
+                  type="text"
+                  name="manager"
+                  value={formData.manager}
+                  onChange={handleCreateChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  disabled={createLoading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Address (optional)
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleCreateChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                disabled={createLoading}
+              />
+            </div>
+
             <div className="flex gap-2">
               <button
                 type="submit"
-                disabled={createLoading}
+                disabled={createLoading || assignableUsers.length === 0}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-indigo-400 text-sm font-medium"
               >
                 {createLoading ? "Adding..." : "Add Employee"}

@@ -3,7 +3,7 @@
  * error message extraction, and apiCall wrapper behaviour.
  * No real HTTP requests are made; axios is mocked via vitest.
  */
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import axios from "axios";
 
 // ─── Helpers tested inline (no direct import of apiClient singleton) ─────────

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { setAuthContext } from "../services/api";
 
 export interface User {
   id: string;
@@ -204,6 +205,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser,
     refreshAccessToken,
   };
+
+  useEffect(() => {
+    // Allow API interceptors to trigger logout when refresh fails.
+    setAuthContext({ logout, refreshAccessToken });
+  }, [logout, refreshAccessToken]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
